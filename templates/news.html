@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>首页 - liNK</title>
+<style type="text/css">
+	.container {
+	  max-width: none !important;
+	  width: 980px;
+	}
+	.mt60{
+		margin-top: 60px;
+	}
+</style>
+
+{% end %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-xs-3 mt60">
+			<ul class="nav nav-pills nav-stacked">
+				<li class="text-muted">
+					<h3>分类</h3>
+				</li>
+				<li {% if categoryChoose =='' %}
+					{% end %}
+				>
+					<a href="/home">
+						<span class="badge pull-right">
+							{% for cate in badge %}
+								{{ cate.cateNumber }}
+							{% end %}
+						</span>
+						所有
+					</a>
+				</li>
+				{% for category in categoryList %}
+				<li {% if categoryChoose == category.Category %}
+					
+					{% end %}
+				>
+					<a href="/home/{{ category.Category }}"> {{ category.Category}} </a>
+				</li>
+				{% end %}
+				<li class="text-muted">
+					<h3>发现</h3>
+				</li>
+				<li class="active" ><a href="/news">动态</a></li>
+	            <li><a href="#">最新</a></li>
+	            <li><a href="#">最热</a></li>
+			</ul>
+		</div>
+
+		<div class="col-xs-9 mt60">
+          <div class="offset1">
+            {% if message %}
+              {% for msg in message %}
+                <div class="alert alert-info alert-dismissable">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                  {{ msg }}
+              	</div>
+              {% end %}
+            {% end %}
+          </div>
+
+          <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#addLink">发布链接</button>
+          {% for link in linkList %}
+          <div>
+	          <hr>
+	          <p class="text-muted">
+	          	<a href="/people/{{ link.ID }}">{{ newsName[link.ID] }}</a> 发布了链接
+	          </p>
+	          <p>
+	          	<a href={{ link.Link }} target="_blank">
+	          		<strong>{{ link.Headline }}</strong>
+	          	</a>
+	          </p>
+	          <p><h6>
+	          	{{ link.Introduction }}
+	          </h6></p>
+	          <p class="text-muted">
+	          	{% if categoryChoose == '' %}
+	          	<span style="float:left;"><small>{{ link.Category }}</small></span>
+	          	{% end %}
+	          	<span style="float:right;"><time><small>{{ link.Time }}</small></time></span>
+	          </p>
+	          <br>
+      	  </div>
+          {% end %}
+		</div>
+	</div>
+</div>
+{% end %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

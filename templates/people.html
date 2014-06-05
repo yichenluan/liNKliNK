@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>{{ people.Name }} - liNK</title>
+<style type="text/css">
+  .container {
+    max-width: none !important;
+    width: 980px;
+  }
+  .mt100{
+    margin-top: 100px;
+  }
+  .block{
+    margin-bottom: 5px;
+    margin-top: 5px;
+  }
+</style>
+{% end %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <div class="col-xs-3 mt100">
+      <div data-spy="affix">
+        <center>
+        <img src="/static/img/1.png" alt="..." class="img-circle" width="150" height="150">
+        <hr>
+        <p><h2>{{ people.Name }}</h2></p>
+        {% if introList %}
+          {% for intro in introList %}
+              <h5 class="text-muted">{{ intro.Intro }}</h5>
+          {% end %}
+        {% end %}
+        <hr>
+        <p >{{ people.Email }}</p>
+        <p >于 2013.03.23 加入</p>
+        {% if people.ID == me.ID %}
+          <a href="/settings/account" role="button" class="btn btn-primary btn-xs btn-block">设置</a>
+        {% else %}
+          {% if followInfo['selfFollowPeople'] %}
+          <a href="/people/{{ people.ID }}/cancleFollow" role="button" class="btn btn-default btn-xs btn-block">取消关注</a> 
+          {% else %}
+          <a href="/people/{{ people.ID }}/follow" role="button" class="btn btn-primary btn-xs btn-block">关注</a>   
+          {% end %} 
+        {% end %}    
+        <hr>
+        <table>
+        <tr>
+        <td class="text-muted" align="center">关注了</td>
+        <td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td class="text-muted" align="center">关注者</td>
+        </tr>
+        <tr>
+        <td align="center"><a href="/people/{{ people.ID }}/following">{{ followInfo['following'] }} 人</a></td>
+        <td>&nbsp;</td>
+        <td align="center"><a href="/people/{{ people.ID }}/followers">{{ followInfo['followers'] }} 人</a></td>
+        </tr>
+        </table>
+        <hr>
+        <p class="text-muted">个人主页被浏览 53 次</p>
+        </center>
+      </div>
+    </div>
+
+    <div class="col-xs-9 mt100">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4>分类</h4>
+        </div>
+        <div class="panel-body">
+          {% for peopleCategory in peopleCategoryList %}
+            <div class="col-xs-4 block">
+              <a href="/people/{{ people.ID }}/category/{{ peopleCategory.Category }}" role="button" 
+              {% if peopleCategoryChoose == peopleCategory.Category %}
+                class="active btn btn-default btn-lg btn-block"
+              {% else %}
+                class="btn btn-default btn-lg btn-block"
+              {% end %}
+              >{{ peopleCategory.Category }}</a>
+            </div>
+          {% end %}
+        </div>
+        <div class="panel-footer">
+          {% if peopleCategoryChoose %}
+            <a href="/people/{{ people.ID }}" role="button" class="btn btn-default btn-xs">返回个人主页</a>
+          {% else %}
+            <a href="/home" role="button" class="btn btn-default btn-xs">返回 liNK</a>
+          {% end %}
+        </div>
+      </div>
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <h4>链接</h4>
+        </div>
+        <div class="panel-body">
+          {% for peopleLink in peopleLinkList %}
+            <p><a href={{ peopleLink.Link }}><strong>{{ peopleLink.Headline }}</strong></a></p>
+            <p><h6>{{ peopleLink.Introduction }}</h6></p>
+            <p class="text-muted">
+              <span style="float:left;"><small>{{ peopleLink.Category }}</small></span>
+              <span style="float:right;"><time><small>{{ peopleLink.Time }}</small></time></span>
+            </p>
+            <br>
+            <hr>
+          {% end %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% end %}

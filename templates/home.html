@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}
+<title>首页 - liNK</title>
+<style type="text/css">
+	.container {
+	  max-width: none !important;
+	  width: 980px;
+	}
+	.mt60{
+		margin-top: 60px;
+	}
+</style>
+
+<script type="text/javascript" language="javascript">
+       function show(id) {
+           document.getElementById(id).style.visibility = "visible";
+       }
+       function hide(id) {
+           document.getElementById(id).style.visibility = "hidden";
+       }
+</script>
+{% end %}
+
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-xs-3 mt60">
+			<ul class="nav nav-pills nav-stacked">
+				<li class="text-muted">
+					<h3>分类</h3>
+				</li>
+				<li {% if categoryChoose =='' %}
+					class="active"
+					{% end %}
+				>
+					<a href="/home">
+						<span class="badge pull-right">
+							{% for cate in badge %}
+								{{ cate.cateNumber }}
+							{% end %}
+						</span>
+						所有
+					</a>
+				</li>
+				{% for category in categoryList %}
+				<li {% if categoryChoose == category.Category %}
+					class="active"
+					{% end %}
+				>
+					<a href="/home/{{ category.Category }}"> {{ category.Category}} </a>
+				</li>
+				{% end %}
+				<li class="text-muted">
+					<h3>发现</h3>
+				</li>
+				<li><a href="/news">动态</a></li>
+	            <li><a href="#">最新</a></li>
+	            <li><a href="#">最热</a></li>
+			</ul>
+		</div>
+
+		<div class="col-xs-9 mt60">
+          <div class="offset1">
+            {% if message %}
+              {% for msg in message %}
+                <div class="alert alert-info alert-dismissable">
+                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                  {{ msg }}
+              	</div>
+              {% end %}
+            {% end %}
+          </div>
+
+          <button type="button" class="btn btn-primary btn-lg btn-block" data-toggle="modal" data-target="#addLink">发布链接</button>
+          {% for link in linkList %}
+          <div onmouseout="hide('{{ 'visibility' + str(link.LinkID) }}')" onmouseover="show('{{ 'visibility' + str(link.LinkID) }}')">
+	          <hr>
+	          <p>
+	          	<a href={{ link.Link }} target="_blank">
+	          		<strong>{{ link.Headline }}</strong>
+	          	</a>
+	          	<span style="visibility:hidden">
+	          	<button id="{{ 'visibility' + str(link.LinkID) }}" type="button" class="close" aria-hidden="true" data-toggle="modal" data-target="#{{ link.LinkID }}">&times;</button>
+	          </span>
+
+				<div class="modal fade" id="{{ link.LinkID }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				  <div class="modal-dialog">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				        <h4 class="modal-title" id="myModalLabel">确定要删除该链接吗?</h4>
+				      </div>
+				      <div class="modal-body">
+				        <p>注意：一旦删除，不可恢复!</p>
+				      </div>
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+				        <a href="/deleteLink/{{ link.LinkID }}">
+				        <button type="button" class="btn btn-primary">确定</button>
+				    	</a>
+				      </div>
+				    </div><!-- /.modal-content -->
+				  </div><!-- /.modal-dialog -->
+				</div><!-- /.modal -->
+
+	          </p>
+	          <p><h6>
+	          	{{ link.Introduction }}
+	          </h6></p>
+	          <p class="text-muted">
+	          	{% if categoryChoose == '' %}
+	          	<span style="float:left;"><small>{{ link.Category }}</small></span>
+	          	{% end %}
+	          	<span style="float:right;"><time><small>{{ link.Time }}</small></time></span>
+	          </p>
+	          <br>
+      	  </div>
+          {% end %}
+		</div>
+	</div>
+</div>
+{% end %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
